@@ -1,0 +1,4 @@
+node_modules
+everything.txt 
+.env
+package-lock.json
