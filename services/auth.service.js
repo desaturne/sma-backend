@@ -21,8 +21,8 @@ const login = async (req) =>{
             return("Password doesnot match!");
         }
     });
-    // if(password != user.password){
-    // }
+    if(password != user.password){
+    }
     const token = jwt.sign({
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
         data: user
@@ -50,9 +50,28 @@ const register = async (req) => {
     return {user, token}
 }
 
+const getUser = async (req) =>{
+    const {userId} = req.params;
+
+    const user = await prisma.user.findFirst({
+        where:{
+            id: userId
+        }
+    })
+    if(!user){
+        return("User of given email doesnot exists!");
+    }
+    bcrypt.compare(password, user.password, function(err, result) {
+        if(err){
+            return("Password doesnot match!");
+        }
+    });
+
+    return {user};
+}
 
 
 
 
 
-export {login, register}
+export {login, register, getUser}
